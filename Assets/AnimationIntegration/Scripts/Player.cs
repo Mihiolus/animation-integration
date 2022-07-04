@@ -8,6 +8,12 @@ public class Player : MonoBehaviour
     private Animator _animator;
     [SerializeField]
     private float _rotationSpeed = 180f;
+    [SerializeField]
+    private Transform _enemy;
+    [SerializeField]
+    private float _killDistance = 2f;
+    [SerializeField]
+    private GameObject _finishPrompt;
 
     private void Awake()
     {
@@ -15,12 +21,6 @@ public class Player : MonoBehaviour
         {
             _animator = GetComponentInChildren<Animator>();
         }
-    }
-
-    // Start is called before the first frame update
-    void Start()
-    {
-
     }
 
     // Update is called once per frame
@@ -45,5 +45,8 @@ public class Player : MonoBehaviour
             _animator.SetFloat("Move X", orientationDelta.x);
             _animator.SetFloat("Move Y", orientationDelta.z);
         }
+
+        var distToEnemy = (_enemy.position - transform.position).sqrMagnitude;
+        _finishPrompt.SetActive(distToEnemy<=_killDistance*_killDistance);
     }
 }
