@@ -374,7 +374,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e00386a89da8707448cf17fde2d690ed, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  targetBone: {fileID: 1372666662}
+  _targetBone: {fileID: 1372666662}
+  _rotationSpeed: 360
+  _maxAngle: 90
 --- !u!114 &584555204
 MonoBehaviour:
   m_ObjectHideFlags: 0
