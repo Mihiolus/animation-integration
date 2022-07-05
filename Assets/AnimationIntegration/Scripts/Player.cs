@@ -70,6 +70,7 @@ public class Player : MonoBehaviour
     private IEnumerator Finisher()
     {
         FinisherRunning = true;
+        _finisherPrompt.SetActive(false);
         _mouseLook.FollowMouse = false;
         Vector3 distVector = _enemy.position - transform.position;
         float dist = distVector.magnitude;
@@ -111,6 +112,9 @@ public class Player : MonoBehaviour
         while(FinisherRunning){
             yield return null;
         }
+        Enemy enemy = _enemy.GetComponent<Enemy>();
+        enemy.Die();
+        EnemyManager.Instance.Respawn(enemy);
         _gun.SetActive(true);
         _sword.SetActive(false);
         _mouseLook.FollowMouse = true;
