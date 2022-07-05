@@ -5,6 +5,7 @@ public class Enemy : MonoBehaviour
     [SerializeField]
     private Animator _animator;
     private Rigidbody[] _ragdoll;
+    public bool IsAlive = true;
 
     private void Awake()
     {
@@ -26,6 +27,7 @@ public class Enemy : MonoBehaviour
         {
             rb.isKinematic = false;
         }
+        IsAlive = false;
     }
 
     public void Respawn()
@@ -35,5 +37,6 @@ public class Enemy : MonoBehaviour
         {
             rb.isKinematic = true;
         }
+        IsAlive = true;
     }
 }

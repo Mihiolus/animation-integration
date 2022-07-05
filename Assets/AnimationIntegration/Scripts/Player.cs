@@ -11,6 +11,7 @@ public class Player : MonoBehaviour
     private float _rotationSpeed = 180f, _finisherRotationSpeed = 720f;
     [SerializeField]
     private Transform _enemy;
+    private Enemy _enemyScript;
     [SerializeField]
     private float _finisherPromptDistance = 2f;
     [SerializeField]
@@ -21,6 +22,7 @@ public class Player : MonoBehaviour
     private MouseLook _mouseLook;
     [SerializeField]
     private GameObject _gun, _sword;
+    private AnimationEventProcessor _animationEventProcessor;
 
     private void Awake()
     {
@@ -29,6 +31,8 @@ public class Player : MonoBehaviour
             _animator = GetComponentInChildren<Animator>();
         }
         _mouseLook = GetComponent<MouseLook>();
+        _enemyScript = _enemy.GetComponent<Enemy>();
+        _animationEventProcessor = _animator.GetComponent<AnimationEventProcessor>();
     }
 
     // Update is called once per frame
@@ -39,7 +43,9 @@ public class Player : MonoBehaviour
             return;
         }
         var distToEnemy = (_enemy.position - transform.position).sqrMagnitude;
-        bool finisherAvailable = distToEnemy <= _finisherPromptDistance * _finisherPromptDistance;
+        bool finisherAvailable = 
+        distToEnemy <= _finisherPromptDistance * _finisherPromptDistance
+        && _enemyScript.IsAlive;
         _finisherPrompt.SetActive(finisherAvailable);
         if (finisherAvailable && Input.GetKeyDown(KeyCode.Space))
         {
@@ -109,12 +115,10 @@ public class Player : MonoBehaviour
         _gun.SetActive(false);
         _sword.SetActive(true);
         _animator.SetTrigger("Finish");
+        _animationEventProcessor.CurrentEnemy = _enemyScript;
         while(FinisherRunning){
             yield return null;
         }
-        Enemy enemy = _enemy.GetComponent<Enemy>();
-        enemy.Die();
-        EnemyManager.Instance.Respawn(enemy);
         _gun.SetActive(true);
         _sword.SetActive(false);
         _mouseLook.FollowMouse = true;
